@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Juego de Peligros y Riesgos en el Trabajo</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    
+    .options {
+      display: inline-block;
+      margin-top: 10px;
+    }
+    
+    .option {
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .option:hover {
+      background-color: #ccc;
+    }
+    
+    .result {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    
+    .game-container {
+      width: 600px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Juego de Peligros y Riesgos en el Trabajo</h1>
+  
+  <div class="game-container">
+    <div id="question-container" class="question"></div>
+    <div id="options-container" class="options"></div>
+    <div id="result-container" class="result"></div>
+    <button id="restart-button" style="display: none;">Reiniciar juego</button>
+  </div>
+
+  <script>
+    // Preguntas y respuestas del juego
+    var questions = [
+      {
+        question: "¿Cuál de las siguientes situaciones es un peligro en el trabajo?",
+        options: ["Uso adecuado del equipo de protección personal", "Derrame de productos químicos sin limpiar", "Cumplimiento de los procedimientos de seguridad"],
+        correctAnswer: 1
+      },
+      {
+        question: "¿Qué significa el término 'riesgo laboral'?",
+        options: ["Probabilidad de que ocurra un accidente o lesión", "Condiciones seguras en el entorno de trabajo", "Cumplimiento de las normativas laborales"],
+        correctAnswer: 0
+      },
+      {
+        question: "¿Cuál de las siguientes acciones ayuda a prevenir riesgos laborales?",
+        options: ["Ignorar las señales de advertencia", "Realizar una evaluación de riesgos", "No utilizar equipo de protección personal"],
+        correctAnswer: 1
+      }
+    ];
+
+    var currentQuestion = 0;
+    var score = 0;
+
+    var questionContainer = document.getElementById("question-container");
+    var optionsContainer = document.getElementById("options-container");
+    var resultContainer = document.getElementById("result-container");
+    var restartButton = document.getElementById("restart-button");
+
+    function displayQuestion() {
+      var question = questions[currentQuestion];
+      questionContainer.textContent = question.question;
+
+      optionsContainer.innerHTML = "";
+      for (var i = 0; i < question.options.length; i++) {
+        var option = document.createElement("div");
+        option.classList.add("option");
+        option.textContent = question.options[i];
+        option.setAttribute("data-index", i);
+        option.addEventListener("click", checkAnswer);
+        optionsContainer.appendChild(option);
+      }
+    }
+
+    function checkAnswer(event) {
+      var selectedOption = event.target;
+      var selectedAnswer = parseInt(selectedOption.getAttribute("data-index"));
+
+      if (selectedAnswer === questions[currentQuestion].correctAnswer) {
+        score++;
+        resultContainer.textContent = "¡Correcto! ¡Has obtenido " + score + " puntos!";
+      } else {
+        resultContainer.textContent = "Incorrecto. La respuesta correcta era la opción " + (questions[currentQuestion].correctAnswer + 1) + ".";
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion === questions.length) {
+        questionContainer.textContent = "Juego terminado. Has obtenido " + score + " puntos.";
+        optionsContainer.style.display = "none";
+        restartButton.style.display = "inline-block";
+      } else {
+        displayQuestion();
+      }
+    }
+
+    function restartGame() {
+      currentQuestion = 0;
+      score = 0;
+      resultContainer.textContent = "";
+      optionsContainer.style.display = "block";
+      restartButton.style.display = "none";
+      displayQuestion();
+    }
+
+    displayQuestion();
+
+    restartButton.addEventListener("click", restartGame);
+  </script>
+</body>
+</html>
